@@ -13,7 +13,10 @@ router.get('/', function(req, res, next) {
 */
 router.get('/models', function(req, res, next) {
 	// use api to get models and render output
-	res.render('models');
+	promise = api.fetchModels();
+	promise.then(function(models){
+		res.render('models', {models: models});
+	});
 });
 
 /*
@@ -22,7 +25,10 @@ router.get('/models', function(req, res, next) {
 */
 router.get('/services', function(req, res, next) {
 	// use api to get services and render output
-	res.render('services');
+	promise = api.fetchServices();
+	promise.then(function(services){
+		res.render('services', {services: services});
+	});
 });
 
 /*
@@ -31,9 +37,11 @@ router.get('/services', function(req, res, next) {
 * Make reviews searchable (content and source)
 */
 router.get('/reviews', function(req, res, next) {
-	return Promise.all([api.fetchCustomerReviews(), api.fetchCorporateReviews()])
+	Promise.all([api.fetchCustomerReviews(), api.fetchCorporateReviews()])
 		.then(function(reviews) {
-			res.render('reviews', {reviews: reviews});
+			res.render('reviews', {reviews: reviews[0].concat(reviews[1])});
+		}, function(reason){
+			console.log("promise " + reason);
 		});
 });
 

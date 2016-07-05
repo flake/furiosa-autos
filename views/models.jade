@@ -1,10 +1,18 @@
 extends _shared
 
+script(type='text/javascript')
+	$(document).ready(function() {
+	$.tablesorter.themes.bootstrap.table = "table table-bordered table-striped";
+	$(" table.tablesorter ").tablesorter({
+	sortList: [[0,0]],
+	theme : 'bootstrap',
+	widgets : [ 'uitheme' ]
+	});
+	});
+
 block body
 	.models
 		h2 Models we work on
-
-		//- Implement sorting here
 
 		for model in models
 			h4= model
